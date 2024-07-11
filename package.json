@@ -1,0 +1,17 @@
+{
+  "name": "dbmeter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "rpi-ws281x-native": "^1.0.4",
+    "system-sleep": "^1.3.7"
+  }
+}

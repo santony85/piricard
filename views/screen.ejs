@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>BPCE SCORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+	  
+  html,body{
+	width:100%;
+	height: 100%;
+	overflow: hidden;
+	background: #002d72;
+	color: #74D1EA;
+	font-family: system-ui;
+	cursor:none;
+  }
+  .container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+  }
+  .dbv{
+	font-size: 800px;
+	font-weight: 900;
+  }
+  .dbl{
+	font-size: 300px;
+  }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+	  <div><span class="dbv" id="valdb">108</span><span class="dbl">.dB</span></div>
+  </div>
+  <script>
+	  
+	  function getdb(){
+		  var url="http://192.168.4.1/getdb"
+		  fetch(url).then(function(response) {
+			return response.json();
+		  }).then(function(data) {
+			console.log(data);
+			document.getElementById("valdb").innerHTML = parseInt(data);
+		  }).catch(function(err) {
+			console.log('Fetch Error :-S', err);
+		  });
+	  }
+	  var x = setInterval(getdb, 500);
+
+	  //clearInterval(x);
+	  
+  </script>
+
+</body>
+</html>

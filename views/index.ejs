@@ -1,0 +1,135 @@
+<!DOCTYPE HTML><html><head>
+  <title>BPCE SCORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  html,body{
+	width:98%;
+	overflow-x: hidden;
+  }
+  input {
+	height :48px;
+	font-size:22px;
+	border-radius: 20px;
+	border: solid 1px black;
+	background-color: steelblue;
+  }
+  .bt{
+	position: absolute;
+	bottom: 10px;
+	width: 90%;
+	left: 5%;
+  }
+  .w {
+	width:100%;
+	text-align: center;
+  }
+  .wn {
+	width:90%;
+  }
+  .slider {
+	-webkit-appearance: none;
+	width: 96%;
+	height: 25px;
+	border-radius: 5px;  
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 45px;
+	height: 45px;
+	border-radius: 50%; 
+	background: steelblue;
+	cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	background: #04AA6D;
+	cursor: pointer;
+  }
+  </style>
+  </head><body>
+  <br>
+  <center>
+  <h1 class="w">TOTEM RICARD APP</h1>
+  <br><br>
+  <form action="/">
+	<input type="submit" value="Mode SONOMETRE" class="w">
+  </form><br><br>
+  <form action="/wave">
+	<input type="submit" value="Mode VAGUE" class="w">
+  </form><br>
+  <form action="/blink">
+	<input type="submit" value="Mode CLIGNO" class="w">
+  </form><br>
+
+  <div id="vdb"></div>
+  <br>
+  <div class="slidecontainer">
+	<form action="/setdbapp" id="setdbapp">
+	  <input type="range" min="90" max="150" value="@v@" class="slider" id="myRangeVal" name="setdbapp">
+	</form>
+  </div><br>
+  <form action="/on">
+	<input type="submit" value="Mode ON" class="w">
+  </form><br>
+  <form action="/off">
+	<input type="submit" value="Mode OFF" class="w">
+  </form><br>
+  <div id="vmin"></div>
+  <br>
+  <div class="slidecontainer">
+	<form action="/setdbmin" id="setdbmin">
+	  <input type="range" min="50" max="90" value="@s@" class="slider" id="myRangeMin" name="setdbmin">
+	</form>
+  </div><br>
+  <div id="vmax"></div>
+  <br>
+  <div class="slidecontainer">
+	<form action="/setdbmax" id="setdbmax">
+	  <input type="range" min="90" max="150" value="@m@" class="slider" id="myRangeMax" name="setdbmax">
+	</form>
+  </div><br>
+
+
+  
+  </center>
+  <script>
+	var slidermin = document.getElementById("myRangeMin");
+	var outputmin = document.getElementById("vmin");
+
+	var slidermax = document.getElementById("myRangeMax");
+	var outputmax = document.getElementById("vmax");
+
+	var sliderapp = document.getElementById("myRangeVal");
+	var outputapp = document.getElementById("vdb");
+
+	outputmin.innerHTML = slidermin.value; // Display the default slider value
+	outputmax.innerHTML = slidermax.value; // Display the default slider value
+	outputapp.innerHTML = sliderapp.value; // Display the default slider value
+
+	slidermin.oninput = function() {
+	  outputmin.innerHTML = this.value;
+	  document.forms["setdbmin"].submit();
+	}
+
+	slidermax.oninput = function() {
+	  outputmax.innerHTML = this.value;
+	  document.forms["setdbmax"].submit();
+	}
+
+	sliderapp.oninput = function() {
+	  outputapp.innerHTML = this.value;
+	  document.forms["setdbapp"].submit();
+	}
+
+  </script>
+</body></html>
