@@ -9,6 +9,7 @@ app.set('view engine', 'ejs');
 
 var blink = require("./animations/blink.js");
 var wave = require("./animations/wave.js");
+var dbmeter = require("./animations/dbmeter.js");
 
 const nbLedParAnneau = 1;
 const nbAnneau = 64;
@@ -16,6 +17,7 @@ const nbLeds = nbLedParAnneau * nbAnneau;
 const color = 0xffcc22;
 
 var instance=wave;
+var dbLevel=100;
 
 const ws281x = require('rpi-ws281x-native');
 
@@ -42,6 +44,8 @@ const gauge = {
 	colorArray : colorArray
 }
 
+
+
 function clearAll(){
   for (let i = 0; i < channel.count; i++) {
 	colorArray[i] = 0x000000;
@@ -60,14 +64,24 @@ clearAll();
 
 // index page
 app.get('/', function(req, res) {
-	console.log("ici");
 	res.render('index');
+});
+
+// index page
+app.get('/screen', function(req, res) {
+	res.render('screen',{db:dbLevel});
 });
 
 // index page
 app.get('/screen', function(req, res) {
 	res.render('screen');
 });
+
+app.get('/setdb/:db', function(req, res) {
+    console.log(":db");
+	res.render('index');
+});
+
 
 // index page
 app.get('/blink', function(req, res) {
@@ -99,15 +113,18 @@ app.get('/off', function(req, res) {
 	res.render('index');
 });
 
+// index page
+app.get('/dbmeter', function(req, res) {
+	clearAll();
+	instance.stop();
+	instance = dbmeter;
+	instance.start("",gauge);
+	res.render('index');
+});
 
 app.listen(80,function(){ 
-	//instance = wave;
-	//instance.start("",gauge);
-	/*setTimeout(function(){
-		instance.stop();
-		instance = blink;
-		instance.start("",gauge);
-	},4000)*/ 
+	instance = wave;
+	instance.start("",gauge);
 	
 });
 console.log('8080 is the magic port');

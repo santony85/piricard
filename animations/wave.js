@@ -7,7 +7,7 @@ function wave(){
 	this.start = function (args, gauge) {
 		console.log("Going wave mode.");
 		isRun=1;
-		this.WaveTick(args, gauge);
+		this.processTick(args, gauge);
 	};
 	
 	this.stop = function (){
@@ -26,7 +26,7 @@ function wave(){
 	  }
 	};
 	
-	this.WaveTick = function (args, gauge) {
+	this.processTick = function (args, gauge) {
 	  var _this = this;	  
 	  if(dir==0){
 		this.colorWipeOn(posLed,gauge);
@@ -47,7 +47,7 @@ function wave(){
 	  gauge.strip.render();
 	  
 	  setTimeout(function () {
-		if(isRun)_this.WaveTick(args, gauge);
+		if(isRun)_this.processTick(args, gauge);
 		//console.log("thick");
 	  }, 10);	  
 	}

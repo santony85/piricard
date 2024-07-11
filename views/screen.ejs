@@ -27,17 +27,17 @@
   .dbl{
 	font-size: 300px;
   }
-  </style>
+  </style>  
 </head>
 <body>
 
   <div class="container">
-	  <div><span class="dbv" id="valdb">108</span><span class="dbl">.dB</span></div>
+	  <div><span class="dbv" id="valdb"><%= db %></span><span class="dbl">.dB</span></div>
   </div>
   <script>
 	  
 	  function getdb(){
-		  var url="http://192.168.4.1/getdb"
+		  var url="/getdb"
 		  fetch(url).then(function(response) {
 			return response.json();
 		  }).then(function(data) {
@@ -47,7 +47,7 @@
 			console.log('Fetch Error :-S', err);
 		  });
 	  }
-	  var x = setInterval(getdb, 500);
+	  var x = setInterval(getdb, 200);
 
 	  //clearInterval(x);
 	  

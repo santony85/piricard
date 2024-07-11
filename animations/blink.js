@@ -5,14 +5,14 @@ function blink(){
 	this.start = function (args, gauge) {
 		console.log("Going blink mode.");
 		isRun=1;
-		this.BlinkTick(args, gauge);
+		this.processTick(args, gauge);
 	};
 	
 	this.stop = function (){
 	  isRun=0;	
 	}
 	
-	this.BlinkTick = function (args, gauge) {
+	this.processTick = function (args, gauge) {
 	  var _this = this;
 	  if(!isOn){
 		isOn=1;
@@ -29,7 +29,7 @@ function blink(){
 	  gauge.strip.render();
 	  
 	  setTimeout(function () {
-	    if(isRun)_this.BlinkTick(args, gauge);
+	    if(isRun)_this.processTick(args, gauge);
 		//console.log("thick");
 	  }, 500);	  
     }
