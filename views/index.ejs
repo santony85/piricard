@@ -75,7 +75,7 @@
   <br>
   <div class="slidecontainer">
 	<form action="/setdbapp" id="setdbapp">
-	  <input type="range" min="90" max="150" value="@v@" class="slider" id="myRangeVal" name="setdbapp">
+	  <input type="range" min="90" max="150" value="<%= dbapp %>" class="slider" id="myRangeVal" name="setdbapp">
 	</form>
   </div><br>
   <form action="/on">
@@ -88,14 +88,14 @@
   <br>
   <div class="slidecontainer">
 	<form action="/setdbmin" id="setdbmin">
-	  <input type="range" min="50" max="90" value="@s@" class="slider" id="myRangeMin" name="setdbmin">
+	  <input type="range" min="40" max="90" value="<%= seuil %>" class="slider" id="myRangeMin" name="setdbmin">
 	</form>
   </div><br>
   <div id="vmax"></div>
   <br>
   <div class="slidecontainer">
 	<form action="/setdbmax" id="setdbmax">
-	  <input type="range" min="90" max="150" value="@m@" class="slider" id="myRangeMax" name="setdbmax">
+	  <input type="range" min="90" max="150" value="<%= dbmax %>" class="slider" id="myRangeMax" name="setdbmax">
 	</form>
   </div><br>
 

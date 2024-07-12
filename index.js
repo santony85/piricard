@@ -12,11 +12,12 @@ var wave = require("./animations/wave.js");
 var dbmeter = require("./animations/dbmeter.js");
 
 const nbLedParAnneau = 1;
-const nbAnneau = 64;
+const nbAnneau = 75;
 const nbLeds = nbLedParAnneau * nbAnneau;
-const color = 0xffcc22;
+const color = 0xcdd100;
 
 var instance=wave;
+var dbInstance=dbmeter;
 var dbLevel=100;
 
 const ws281x = require('rpi-ws281x-native');
@@ -34,6 +35,13 @@ const options = {
 const channel = ws281x(nbLeds, options);
 const colorArray = channel.array;
 
+
+let dataDb = {
+	dbmax :150,
+	seuil:50,
+	dbapp:120	
+}
+
 const gauge = {
 	nbLedParAnneau : nbLedParAnneau ,
 	nbAnneau : nbAnneau,
@@ -44,7 +52,15 @@ const gauge = {
 	colorArray : colorArray
 }
 
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
+const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200,autoOpen: true });
+const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
+parser.on('data', function(data){
+  dbLevel = data;
+  dbInstance.setdB(data);
+})
 
 function clearAll(){
   for (let i = 0; i < channel.count; i++) {
@@ -64,7 +80,7 @@ clearAll();
 
 // index page
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index',dataDb);
 });
 
 // index page
@@ -78,53 +94,77 @@ app.get('/screen', function(req, res) {
 });
 
 app.get('/setdb/:db', function(req, res) {
-    console.log(":db");
-	res.render('index');
+	dbLevel = req.params.db;
+	dbInstance.setdB(dbLevel);
+	res.send(200);
 });
 
+app.get('/setdbmin', function(req, res) {
+	var val = req.query.setdbmin;
+	console.log(val);
+	dataDb.seuil = val;
+	dbInstance.setDataDb(gauge,dataDb);
+	res.render('index',dataDb);
+});
+
+app.get('/setdbmax', function(req, res) {
+	var val = req.query.setdbmax;
+	console.log(val);
+	dataDb.dbmax = val;
+    dbInstance.setDataDb(gauge,dataDb);
+	res.render('index',dataDb);
+});
+
+app.get('/getdb', function(req, res) {
+	res.send(dbLevel);
+});
 
 // index page
 app.get('/blink', function(req, res) {
     instance.stop();
+	dbInstance.stop();
 	instance = blink;
 	instance.start("",gauge);
-	res.render('index');
+	res.render('index',dataDb);
 });
-
+  
 // index page
 app.get('/wave', function(req, res) {
 	instance.stop();
+	dbInstance.stop();
 	instance = wave;
 	instance.start("",gauge);
-	res.render('index');
+	res.render('index',dataDb);
 });
 
 // index page
 app.get('/on', function(req, res) {
+	dbInstance.stop();
 	instance.stop();
 	lightAll();
-	res.render('index');
+	res.render('index',dataDb);
 });
 
 // index page
 app.get('/off', function(req, res) {
+	dbInstance.stop();
 	instance.stop();
 	clearAll();
-	res.render('index');
+	res.render('index',dataDb);
 });
 
 // index page
 app.get('/dbmeter', function(req, res) {
 	clearAll();
 	instance.stop();
-	instance = dbmeter;
-	instance.start("",gauge);
-	res.render('index');
+	dbInstance.stop();
+    dbInstance.start("",gauge,dataDb);
+	res.render('index',dataDb);
 });
 
 app.listen(80,function(){ 
-	instance = wave;
-	instance.start("",gauge);
+	//instance = wave;
+	dbInstance.start("",gauge,dataDb);
 	
 });
 console.log('8080 is the magic port');
