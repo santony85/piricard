@@ -12,7 +12,7 @@ var wave = require("./animations/wave.js");
 var dbmeter = require("./animations/dbmeter.js");
 
 const nbLedParAnneau = 1;
-const nbAnneau = 75;
+const nbAnneau = 144; 
 const nbLeds = nbLedParAnneau * nbAnneau;
 const color = 0xcdd100;
 
@@ -37,7 +37,7 @@ const colorArray = channel.array;
 
 
 let dataDb = {
-	dbmax :150,
+	dbmax :110,
 	seuil:50,
 	dbapp:120	
 }
@@ -59,6 +59,7 @@ const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 parser.on('data', function(data){
   dbLevel = data;
+  console.log(dbLevel);
   dbInstance.setdB(data);
 })
 

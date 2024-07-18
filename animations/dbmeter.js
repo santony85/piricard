@@ -24,10 +24,8 @@ function dbmeter(){
 	}
 	
 	this.setdB = function(decibel){
-		//console.log(decibel);
 		var cal = decibel - seuil;
 		nb = Math.round(cal/dbParAnn)+2;
-		//console.log(nb);
 	}
 	
 	this.setDataDb = function(gauge,dataDb){
@@ -36,10 +34,7 @@ function dbmeter(){
 	   range = dbmax - seuil;
 	   dbParAnn = range / gauge.nbAnneau;	
 	}
-	
-	//calcul nb par dB
-	
-	
+
 	this.processTick = function (args, gauge) {
 	  var _this = this;
 	  
