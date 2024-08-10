@@ -1,3 +1,6 @@
+// todo
+
+
 // load the things we need
 var express = require('express');
 var app = express();
@@ -11,8 +14,8 @@ var blink = require("./animations/blink.js");
 var wave = require("./animations/wave.js");
 var dbmeter = require("./animations/dbmeter.js");
 
-const nbLedParAnneau = 1;
-const nbAnneau = 144; 
+const nbLedParAnneau = 119;
+const nbAnneau = 23; 
 const nbLeds = nbLedParAnneau * nbAnneau;
 const color = 0xcdd100;
 
@@ -35,6 +38,8 @@ const options = {
 const channel = ws281x(nbLeds, options);
 const colorArray = channel.array;
 
+//ws281x.init(nbLeds);
+
 
 let dataDb = {
 	dbmax :110,
@@ -52,6 +57,10 @@ const gauge = {
 	colorArray : colorArray
 }
 
+let oldDbData=dataDb;
+
+
+/*
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200,autoOpen: true });
@@ -59,9 +68,28 @@ const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 parser.on('data', function(data){
   dbLevel = data;
-  console.log(dbLevel);
-  dbInstance.setdB(data);
+  if(dbLevel.indexOf("l")!==-1){
+	console.log("live on"); 
+	oldDbData.seuil = dataDb.seuil;
+	oldDbData.dbmax = dataDb.dbmax;
+	dataDb.seuil = 103;
+	dataDb.dbmax = 111;
+	dbInstance.setDataDb(gauge,dataDb);
+	 
+  }
+  else if(dbLevel.indexOf("o")!==-1){
+	console.log("live off"); 
+	dataDb.seuil = oldDbData.seuil;
+	dataDb.dbmax = oldDbData.dbmax;	
+	dbInstance.setDataDb(gauge,dataDb);
+  } 
+  else{
+	//console.log((dbLevel));
+	dbInstance.setdB(dbLevel);  
+  }
+
 })
+*/
 
 function clearAll(){
   for (let i = 0; i < channel.count; i++) {
@@ -72,12 +100,13 @@ function clearAll(){
 
 function lightAll(){
   for (let i = 0; i < channel.count; i++) {
-	colorArray[i] = color;
+	colorArray[i] = color;  
 	}
   ws281x.render();
 }
 
 clearAll();
+lightAll();
 
 // index page
 app.get('/', function(req, res) {
@@ -165,7 +194,9 @@ app.get('/dbmeter', function(req, res) {
 
 app.listen(80,function(){ 
 	//instance = wave;
-	dbInstance.start("",gauge,dataDb);
+	//dbInstance.start("",gauge,dataDb);
+	instance = wave;
+	instance.start("",gauge);
 	
 });
 console.log('8080 is the magic port');
